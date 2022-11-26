@@ -1,0 +1,24 @@
+- hosts: s3
+  gather_facts: false
+  become: true
+  tasks:
+    - name: Installing Java
+      command: amazon-linux-extras install java-openjdk11
+    - name: Adding Jenkins Repo
+      get_url:
+        url: https://pkg.jenkins.io/redhat-stable/jenkins.repo
+        dest: /etc/yum.repos.d/jenkins.repo
+    - name: import jenkins key
+      rpm_key:
+        state: present
+        key: https://pkg.jenkins.io/redhat-stable/jenkins.io.key
+    - name: Installing Jenkins
+      yum: name=jenkins state=present
+    - name: Jenkins service start
+      systemd: name=jenkins state=started
+    - name: Jenkins service enable
+      systemd: name=jenkins enabled=true
+    - name: init password jenkin
+      shell: cat /var/lib/jenkins/secrets/initialAdminPassword
+        changed_when: false
+        register: result

@@ -1,0 +1,13 @@
+- hosts: s4
+  become: true
+  tasks:
+    - name: Installing Java
+      yum: name=java-1.8.0-openjdk-devel.x86_64 state=present
+    - name: Adding Sonar Repos
+      get_url:
+        url: http://downloads.sourceforge.net/project/sonar-pkg/rpm/sonar.repo
+        dest: /etc/yum.repos.d/sonar.repo
+    - name: Insatting SonarQube
+      yum: name=sonar state=present
+    - name: Sonar Service start
+      systemd: name=sonar state=started

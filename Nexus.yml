@@ -1,0 +1,44 @@
+- hosts: s5
+  become: true
+  tasks:
+    - name: Insattling Java
+      yum: name=java-1.8.0-openjdk-devel.x86_64 state=present
+    - name: Installing Nexus
+      get_url:
+        url: https://download.sonatype.com/nexus/3/latest-unix.tar.gz
+        dest: /opt
+    - name: Un_tar The file
+      unarchive:
+        src: /opt/latest-unix.tar.gz
+        dest: /opt
+        remote_src: yes
+    - name: Changing the name
+      command: mv /opt/nexus-3.34.0-01 nexus3
+    - name: changing Ownership permission
+      file:
+        path: /opt/nexus3
+        owner: ec2-user
+        group: ec2-user
+        recurse: yes
+        state: directory
+    - name: changing Ownership permission
+      file:
+        path: /opt/sonatype-work
+        owner: ec2-user
+        group: ec2-user
+        recurse: yes
+        state: directory
+    - name: make Nexus symbolic
+      file:
+        src: /opt/nexus3/bin/nexus
+        dest: /usr/local/tomcat9
+        state: link
+    - name: Insert Line
+      lineinfile:
+        path: /opt/nexus3/bin/nexus.rc
+        line: 'run_as_user="ec2-user"'
+        insertbefore: BOF
+    - name: add in config
+      command: chkconfig --add nexus /etc/init.d
+    - name: Nexus Service Start
+      command: systemctl start nexus /etc/init.d

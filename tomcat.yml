@@ -1,0 +1,48 @@
+- hosts: s2
+  become: true
+  tasks:
+    - name: Java Installation
+      yum: name=java-1.8.0-openjdk-devel.x86_64 state=present
+    - name: add tomcatuser
+      user:
+        name: tomcat
+        shell: /sbin/nologin
+    - name: add new username
+      user:
+        name: bobby
+        password: 'bobby'
+    - name: Tomcat Installation
+      get_url:
+        url: https://dlcdn.apache.org/tomcat/tomcat-9/v9.0.69/bin/apache-tomcat-9.0.69.tar.gz
+        dest: /tmp
+    - name: Untar The file
+      unarchive:
+        src: /tmp/apache-tomcat-9.0.69.tar.gz
+        dest: /tmp
+        remote_src: yes
+    - name: Change the directory Permissions
+      ansible.builtin.file:
+        path: /tmp/apache-tomcat-9.0.69/webapps
+        state: directory
+        mode: '0755'
+    - name: Deleting Line in context.xml
+      lineinfile: 
+        path: /tmp/apache-tomcat-9.0.69/webapps/manager/META-INF/context.xml
+        regexp: "valve"
+        state: absent
+    - name: Deleting Line in context.xml
+      lineinfile: 
+        path: /tmp/apache-tomcat-9.0.69/webapps/manager/META-INF/context.xml
+        regexp: "allow"
+        state: absent
+    - name : Adding the lines in tomcat-users.xml
+      lineinfile:
+        path: /tmp/apache-tomcat-9.0.69/conf/tomcat-users.xml
+        line: '{{item}}'
+        insertbefore: '</tomcat-users>'
+      with_items:
+        - <role rolename="manager-gui"/>
+        - <role rolename="manager-script"/>
+        - <user username="bobby" password="bobby" roles="manager-gui, manager-script"/>
+    - name: Tomcat Service start
+      command: nohup /tmp/apache-tomcat-9.0.69/bin/startup.sh
