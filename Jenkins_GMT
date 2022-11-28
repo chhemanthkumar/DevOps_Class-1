@@ -19,7 +19,7 @@ pipeline{
 	
 	stage(Git Check Out){
 	  steps{
-	    git credentialsId: 'e42b5874-abcb-4127-9316-b19d0c3dceb7', url: 'https://github.com/anilkumardevoops/DevOps_Class.git'
+	    git credentialsId: 'Javahome', url: 'https://github.com/anilkumardevoops/DevOps_Class.git'
 	  }
 	}
     stage(Maven Build){
