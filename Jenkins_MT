@@ -1,7 +1,5 @@
 pipeline{
-  agent{
-    label n1
-    }
+  agent any
   stages{
     stage("Maven & Tomcat Installation"){
       steps{
