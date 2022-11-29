@@ -1,21 +1,15 @@
 pipeline{
   agent any
-  
-  environment{
-        PATH = "/opt/maven3/bin:$PATH"
-		
-	stages{
+  stages{
 	  stage("Maven Installing"){
 	    steps{
 		  ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'maven.xml'
-		  
-	  stage("Tomcat Installing"){
-        steps{
-           ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'tomcat.xml'
-        }
-      }		
+		}
+	  }
+	  stage("Tomcat Install"){
+	    steps{
+		  ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'tomcat.xml'
+		}
 	  }
 	}
-  }
- }
-} 
+}
