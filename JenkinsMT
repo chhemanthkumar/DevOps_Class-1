@@ -5,11 +5,11 @@ pipeline{
         PATH = "/opt/maven3/bin:$PATH"
 		
 	stages{
-	  stage(Maven Installing){
+	  stage("Maven Installing"){
 	    steps{
 		  ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'maven.xml'
 		  
-	  stage(Tomcat Installing){
+	  stage("Tomcat Installing"){
         steps{
            ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'tomcat.xml'
         }
