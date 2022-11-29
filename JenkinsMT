@@ -8,12 +8,12 @@ pipeline{
 	  }
 	  stage("Maven Installing"){
 	    steps{
-		  ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: '/home/ec2-user/ansible-app/myinventory', playbook: '/home/ec2-user/ansible-app/maven.yml'
+		  ansiblePlaybook credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'maven.yml'
 		}
 	  }
 	  stage("Tomcat Install"){
 	    steps{
-		  ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: '/home/ec2-user/ansible-app/myinventory', playbook: '/home/ec2-user/ansible-app/tomcat.yml'
+		  ansiblePlaybook credentialsId: 'private-key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'tomcat.yml'
 		}
 	  }
 	}
