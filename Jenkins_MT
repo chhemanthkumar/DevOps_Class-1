@@ -1,18 +1,19 @@
 pipeline{
   agent any
   stages{
-    stage("git checkout"){
-	    steps{
-		  git credentialsId: 'Javahome', url: 'https://github.com/anilkumardevoops/DevOps_Class.git'
-		}
-    stage("Maven & Tomcat Installation"){
-	    steps{
-	      dir('/home/ec2-user/ansible-app') {
-          sh 'ansible-playbook maven.yml'
-		  sh 'ansible-playbook tomcat.yml'
-      }
+    stage("Git CheckOut){
+	  steps{
+	    git credentialsId: 'Javahome', url: 'https://github.com/anilkumardevoops/DevOps_Class.git'
+	  }
+	}
+	
+	stage("Maven & Tomcat Installation"){
+	  steps{
+	    dir('/home/ec2-user/ansible-app') {
+        sh 'ansible-playbook maven.yml'
+		sh 'ansible-playbook tomcat.yml'
+       }
 	 }
 	}
   }
- }
-}
+}  
