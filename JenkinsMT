@@ -1,6 +1,11 @@
 pipeline{
   agent any
   stages{
+      stage("git checkout"){
+	    steps{
+		  git credentialsId: 'Javahome', url: 'https://github.com/anilkumardevoops/DevOps_Class.git'
+		}
+	  }
 	  stage("Maven Installing"){
 	    steps{
 		  ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'maven.xml'
