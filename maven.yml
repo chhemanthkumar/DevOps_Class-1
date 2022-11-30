@@ -1,4 +1,4 @@
-- hosts: n1
+- hosts: webservers
   become: true
   tasks:
     - name: Installing wget
