@@ -1,12 +1,15 @@
 pipeline{
   agent any
   stages{
-    stage("Maven & Tomcat Installation"){
-      steps{
-            dir('/home/ec2-user/ansible-app') {
-            ansiblePlaybook credentialsId: 'private-key', installation: 'ansible', inventory: '/home/ec2-user/ansible-app/myinventory', playbook: '/home/ec2-user/ansible-app/maven.yml'
-	    }
-	 }
+    stage("Git Clone"){
+	  steps{
+	    git credentialsId: 'Javahome', url: 'https://github.com/anilkumardevoops/DevOps_Class.git'
+	  }
+	}
+	stage("Maven Installing"){
+	  steps{
+	    ansiblePlaybook credentialsId: 'private-key', installation: 'ansible', inventory: 'myinventory', playbook: 'maven.yml'
+	  }
 	}
   }
-}  
+ }  
