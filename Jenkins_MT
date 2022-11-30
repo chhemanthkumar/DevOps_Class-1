@@ -8,7 +8,7 @@ pipeline{
 	}
 	stage("Maven Installing"){
 	  steps{
-	    ansiblePlaybook credentialsId: 'private-key', installation: 'ansible', inventory: 'myinventory', playbook: 'maven.yml'
+	    ansiblePlaybook credentialsId: 'private-key', installation: 'ansible2', inventory: 'myinventory', playbook: 'maven.yml'
 	  }
 	}
   }
