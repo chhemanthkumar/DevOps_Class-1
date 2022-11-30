@@ -4,7 +4,7 @@ pipeline{
     stage("Maven & Tomcat Installation"){
       steps{
             dir('/home/ec2-user/ansible-app') {
-            sh 'ansible-playbook -i /home/ec2-user/ansible-app/myinventory /home/ec2-user/ansible-app/maven.yml'
+            sh 'ansible-playbook -i myinventory maven.yml'
 	    }
 	 }
 	}
