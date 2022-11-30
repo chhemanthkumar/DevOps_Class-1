@@ -1,0 +1,22 @@
+- hosts: n1
+  become: true
+  tasks:
+    - name: Installing wget
+      yum: name=wget state=present
+    - name: Git Installation
+      yum: name=git state=present
+    - name: Git Clone
+      git:
+        repo: 'https://github.com/anilkumardevoops/DevOps_Class.git'
+        dest: /home/ec2-user/ansible_app/DevOps_Class
+        clone: yes
+    - name: Maven Installation
+      get_url:
+        url: http://repos.fedorapeople.org/repos/dchen/apache-maven/epel-apache-maven.repo
+        dest: /etc/yum.repos.d/epel-apache-maven.repo
+    - name: Repos Add
+      command: sed -i s/\$releasever/6/g /etc/yum.repos.d/epel-apache-maven.repo
+    - name: maven Install
+      yum: name=apache-maven state=present
+    - name: Mvn gols
+      command: mvn -f /home/ec2-user/ansible_app/DevOps_Class clean package
