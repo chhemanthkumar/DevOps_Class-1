@@ -3,9 +3,10 @@ pipeline{
   stages{
     stage("Maven & Tomcat Installation"){
       steps{
+            dir('/home/ec2-user/ansible-app') {
             ansiblePlaybook credentialsId: 'private-key', installation: 'ansible2', inventory: 'myinventory', playbook: 'maven.yml'
 	    ansiblePlaybook credentialsId: 'private-key', installation: 'ansible2', inventory: 'myinventory', playbook: 'tomcat.yml'
-      
+          }
 	 }
 	}
   }
