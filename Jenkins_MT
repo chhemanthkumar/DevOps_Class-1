@@ -1,0 +1,15 @@
+pipeline{
+  agent any
+  stages{
+    stage("Git Clone"){
+	  steps{
+	    git credentialsId: 'Javahome', url: 'https://github.com/anilkumardevoops/DevOps_Class.git'
+	  }
+	}
+	stage("Maven Installing"){
+	  steps{
+	    ansiblePlaybook credentialsId: 'private-key', installation: 'ansible2', inventory: 'myinventory', playbook: 'maven.yml'
+	  }
+	}
+  }
+ }  

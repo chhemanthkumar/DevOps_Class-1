@@ -1,0 +1,24 @@
+- hosts: localhost
+  become: true
+  
+  vars:
+    region: "ap-south-1"
+    instance_type: "t2.micro"
+    ami: "ami-074dc0a6f6c764218"
+    keypair: "mylinux"
+    subnetname: "subnet-01ac2edd044abb9ef"
+    sg_group: "sg-0abd8b48539ddfb17"
+  tasks:
+  - ec2: 
+      key_name: "{{keypair}}"
+      image: "{{ami}}"
+      region: "{{region}}"
+      vpc_subnet_id: "{{subnetname}}"
+      wait: yes
+      group: "{{sg_group}}"
+      count: 1
+      count_tag:
+             Name: node5
+      instance_tags:
+              Name: node5
+      register: ec2

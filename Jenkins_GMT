@@ -1,0 +1,46 @@
+pipeline{
+  agent any
+  
+  environment{
+        PATH = "/opt/maven3/bin:$PATH"
+		
+  }
+    stages{
+      stage(Mavan Installing){
+	    stpes{
+	      ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'maven.xml'
+	  }
+	} 
+	  stage(Tomcat Inastalling){
+	    steps{
+	    ansiblePlaybook credentialsId: 'private_key', disableHostKeyChecking: true, installation: 'ansible2', inventory: 'myinventory', playbook: 'tomcat.xml'
+      } 
+    }	
+	
+	stage(Git Check Out){
+	  steps{
+	    git credentialsId: 'Javahome', url: 'https://github.com/anilkumardevoops/DevOps_Class.git'
+	  }
+	}
+    stage(Maven Build){
+      steps{
+        sh "mvn clean package"
+        sh "mv target/*.war target/Sample.web"
+      }
+    }
+    stage(Deployment){
+      steps{
+        sshagent(['tomcat']) {
+          sh """
+		        scp -o StrictHostKeyChecking=no target/myweb.war  ec2-user@172.31.10.233:/home/ec2-user/apache-tomcat-9.0.64/webapps/
+                    
+                ssh ec2-user@172.31.10.233 /home/ec2-user/apache-tomcat-9.0.64/bin/shutdown.sh
+                    
+                ssh ec2-user@172.31.10.233 /home/ec2-user/apache-tomcat-9.0.64/bin/startup.sh
+                
+             """
+	    }
+	}
+  }
+ }	  
+}
